@@ -1,0 +1,37 @@
+
+package edu.princeton.cs.algs4;
+
+public class p1e2 {
+
+public static void main(String[] args) {
+		final int LIMIT = 5;
+		Stack<String> stack = new Stack<String>(); 	// δημιουργία στοίβας
+		Queue<String> queue = new Queue<String>(); 	// δημιουργία ουράς που κρατάει 5 στοιχεία (στο τέλος θα έχει το 5ο έως το 1ο της στοίβας
+		
+		//εισαγωγή στοιχείων στη στοίβα
+		 String item;
+		while (!StdIn.isEmpty()) {
+            item = StdIn.readString();
+            stack.push(item);
+        }
+		/*
+		 * Αφαιρούμε κάθε φορά το κορυφαίο στοιχείο της στοίβας και το εισάγουμε στην ουρά. 
+		 * Όταν το μέγεθος της ουράς είναι LIMIT αφαιρούμε το 1ο στοιχείο της ουράς και 
+		 * στη συνέχεια προσθέτούμε σ' αυτήν το στοιχείο που αφαιρέσαμε απο τη στοίβα
+		 */
+		while(!stack.isEmpty()){
+			//έλεγχος αν η ουρά έχει LIMIT στοιχεία.
+			if (queue.size()==LIMIT){
+					//αφαίρεση του πρώτου στοιχείου της ουράς.
+					queue.dequeue();
+			}
+			queue.enqueue(stack.pop());		//εισαγωγή στην ουρά του κορυφαίου στοιχείου που αφαιρέσαμε απο την στοίβα
+		}
+		//Εμφάνιση αποτελεσμάτων.
+		while(!queue.isEmpty()){
+			StdOut.println(queue.dequeue());
+		}
+
+	}
+
+}
