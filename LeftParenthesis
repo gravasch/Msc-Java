@@ -1,0 +1,62 @@
+ 
+package edu.princeton.cs.algs4;
+
+public class p1e3
+{
+
+	public static void main(String[] args) 
+	{
+		StdOut.print("Give the expression:"); //Προτρέπουμε τον χρήστη να εισάγει την έκφραση
+		String expression = StdIn.readLine();//Διαβάζουμε την έκφραση
+
+		Stack<String> myStack = new Stack<String>();//Η στοίβα που θα χρησιμοποιήσουμε
+
+		for (int i=0; i < expression.length(); i++)//Διαβάζουμε το κείμενο χαρακτήρα προς χαρακτήρα από τα αριστερά προς τα δεξιά
+		{
+			char nextChar = expression.charAt(i);//Ο επόμενος χαρακτήρας που διαβάζουμε
+
+			if (Character.isDigit(nextChar))//Αν ο χαρακτήρας είναι τελεστέος (αριθμός)
+			{
+				myStack.push(Character.toString(nextChar));//Τον εισάγουμε στην στοίβα
+			}
+			else if ((nextChar == '*' || nextChar == '/' || nextChar == '+' || nextChar == '-'))//Αν ο χαρακτήρας είναι τελεστής
+			{
+				myStack.push(Character.toString(nextChar));//Τον εισάγουμε στην στοίβα	
+			}
+			else if (nextChar == ')')//Αν ο χαρακτήρας είναι δεξιά παρένθεση
+			{
+				String operand = "";//H μεταβλητή που θα κρατάει τον νέο τελεστέο
+				boolean operator_1 = false;//Βοηθητική boolean μεταβλητή
+				while (myStack.size() > 0)//Διατρέχουμε την στοίβα προς τα αριστερά (αν χρειαστεί μέχρι το τέλος)
+				{
+					String next = myStack.pop();//Κάνουμε POP τον επόμενο χαρακτήρα
+					//και συνεχίζουμε το POP μέχρι να συναντήσουμε τον δεύτερο τελεστή, δηλαδή μέχρι να έχουμε κάνει POP και ολόκληρο τον δεύτερο τελεστέο
+					if ((next.charAt(0) == '*' || next.charAt(0) == '/' || next.charAt(0) == '+' || next.charAt(0) == '-'))//Εάν συναντήσουμε τελεστή
+					{
+						if (operator_1 == false)//Εάν είναι ο πρώτος τελεστής
+						{
+							operator_1 = true;//Σηκώνεται η σημαία
+						}
+						else//Εάν είναι ο δεύτερος τελεστής
+						{
+							myStack.push(next);//Τον ξαναβάζουμε στην στοίβα
+							break;//Εξερχόμαστε από τον βρόγχο while
+						}
+					}
+					operand = next + operand;//Χτίζουμε τον νέο τελεστέο
+				}
+				operand = "(" + operand + ")";//Βάζουμε τις κατάλληλες παρενθέσεις στον τελεστέο
+
+				myStack.push(operand);	//και τον εισάγουμε στην στοίβα σαν νέο τελεστέο			
+			}
+			else if (nextChar != ' ')//Εάν ο χαρακτήρας (από λάθος μας) δεν είναι τίποτα από τα παραπάνω, αλλά ούτε και κενό (το κενό απλά αγνοείται)
+			{
+				StdOut.println("Not recognizable character '" + nextChar + "' at point[" + i + "].Exiting program!");//Ενημερώνουμε τον χρήστη
+				System.exit(0);//Εξερχόμαστε από το πρόγραμμα
+			}
+		}
+
+		//Στο τέλος η στοίβα μας θα έχει ένα και μοναδικό στοιχείο String, που θα είναι και η τελική έκφταση
+		StdOut.println(myStack.pop());//Τυπώνουμε το κορυφαίο και μοναδικό στοιχείο της στοίβας
+	}
+}
